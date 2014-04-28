@@ -14,11 +14,12 @@ public class Player : MonoBehaviour
 	public Transform wallCheck1;
 	public Transform wallCheck2;
 	float wallCheckRadius = 0.2f;
+	Animator anim;
 
 	// Use this for initialization
 	void Start ()
 	{
-		
+		anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -44,8 +45,10 @@ public class Player : MonoBehaviour
 				}
 		if (move != 0)
 			rigidbody2D.velocity = new Vector2(move, rigidbody2D.velocity.y);
+		anim.SetFloat("Speed", Mathf.Abs(move));
+		anim.speed = anim.GetFloat("Speed");
 	}
-
+	
 	void Update ()
 	{
 		if (grounded && Input.GetKeyDown(KeyCode.Space))
