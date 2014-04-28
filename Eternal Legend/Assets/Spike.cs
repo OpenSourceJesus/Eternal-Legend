@@ -21,7 +21,7 @@ public class Spike : MonoBehaviour
 	{
 		if (other.gameObject.name == "Player")
 		{
-			Application.LoadLevel(0);
+			Application.LoadLevel(Application.loadedLevel);
 		}
 	}
 }

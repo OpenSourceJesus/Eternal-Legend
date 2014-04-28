@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Player.cs" />
      <Compile Include="Assets\Portal.cs" />
+     <Compile Include="Assets\Saw.cs" />
      <Compile Include="Assets\Spike.cs" />
      <Compile Include="Assets\Untitled.cs" />
   </ItemGroup>
