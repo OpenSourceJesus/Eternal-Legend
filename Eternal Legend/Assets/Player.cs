@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
 	public float groundHoverAmount = .1f;
 	//public float wallHoverAmount = .2f;
 	public GUISkin guiSkin1;
+	public GUISkin guiSkin2;
 	float numOfDecimalPlaces = .1f;
 	public int pushOfWallForce = 500;
 	public float extraXVel = 0;
@@ -98,25 +99,52 @@ public class Player : MonoBehaviour
 			rigidbody2D.AddForce(Vector2.up * jumpForce);
 			grounded = false;
 		}
+		if (Input.GetKeyDown(KeyCode.P))
+		{
+			if (Time.timeScale == 0)
+				Time.timeScale = 1;
+			else
+				Time.timeScale = 0;
+		}
 	}
 
-	void Flip ()
+	void Flip () 
 	{
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
-		//yield return new WaitForSeconds(0);
 		transform.localScale = theScale;
 	}
 
 	void OnGUI ()
 	{
 		displayTime = Time.fixedTime - time;
-		GUI.skin = guiSkin1;
-		GUI.Label(new Rect(0, 0, Screen.width, 50), "" + Mathf.Round(displayTime / numOfDecimalPlaces) * numOfDecimalPlaces);
-		if (Input.GetKeyDown(KeyCode.P))
+		GUI.skin = guiSkin2;
+		if (Time.timeScale == 0)
 		{
-
+			time = Time.fixedTime - time;
+			//GUILayout.BeginVertical();
+			if (GUI.Button(new Rect(0, 0, 100, 25), "Resume"))
+				Time.timeScale = 1;
+			for (int i = 1; i <= Application.levelCount; i ++)
+			{
+				//GUILayout.BeginHorizontal();
+				if (GUI.Button(new Rect(0, i * 25 + 40, 100, 25), "Level " + i))
+					Application.LoadLevel(i - 1);
+				if (PlayerPrefs.GetFloat("Level " + i + " Time", Mathf.Infinity) == Mathf.Infinity)
+					GUI.Label(new Rect(100, i * 25 + 40, 100, 25), "Time: Not beaten");
+				else
+					GUI.Label(new Rect(100, i * 25 + 40, 100, 25), "Time: " + PlayerPrefs.GetFloat("Level " + i + " Time", Mathf.Infinity));
+				//GUILayout.EndHorizontal();
+			}
+			//GUILayout.EndVertical();
+		}
+		else
+		{
+			GUI.skin = guiSkin1;
+			GUI.Label(new Rect(0, 25, Screen.width, 50), "" + Mathf.Round(displayTime / numOfDecimalPlaces) * numOfDecimalPlaces);
+			if (GUI.Button(new Rect(0, 0, 100, 25), "Pause"))
+				Time.timeScale = 0;
 		}
 	}
 }
