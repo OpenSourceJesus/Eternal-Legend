@@ -1,10 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Saw.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Player.cs">
     <Files>
-      <File FileName="Assets/Player.cs" Line="4" Column="11" />
-      <File FileName="Assets/Spike.cs" Line="24" Column="49" />
-      <File FileName="Assets/Saw.cs" Line="35" Column="66" />
+      <File FileName="Assets/Player.cs" Line="72" Column="43" />
+      <File FileName="Assets/Spike.cs" Line="2" Column="1" />
+      <File FileName="Assets/Saw.cs" Line="46" Column="3" />
+      <File FileName="Assets/ShadowHand.cs" Line="45" Column="2" />
+      <File FileName="Assets/Frog.cs" Line="61" Column="123" />
+      <File FileName="Assets/Vision.cs" Line="22" Column="55" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
