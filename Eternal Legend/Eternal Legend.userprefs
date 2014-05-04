@@ -1,14 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Portal.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/BreakTile.cs">
     <Files>
       <File FileName="Assets/Player.cs" Line="1" Column="1" />
       <File FileName="Assets/Spike.cs" Line="1" Column="1" />
       <File FileName="Assets/Saw.cs" Line="1" Column="1" />
-      <File FileName="Assets/ShadowHand.cs" Line="1" Column="1" />
+      <File FileName="Assets/ShadowHand.cs" Line="48" Column="4" />
       <File FileName="Assets/Frog.cs" Line="1" Column="1" />
       <File FileName="Assets/Vision.cs" Line="1" Column="1" />
-      <File FileName="Assets/Portal.cs" Line="25" Column="35" />
+      <File FileName="Assets/Portal.cs" Line="1" Column="1" />
+      <File FileName="Assets/BreakTile.cs" Line="15" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
