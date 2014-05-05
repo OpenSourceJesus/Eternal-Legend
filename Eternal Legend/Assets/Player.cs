@@ -72,6 +72,8 @@ public class Player : MonoBehaviour
 					x = 1;
 				else
 					x = -1;
+				if ((move > 0 && x < 0) || (move < 0 && x > 0))
+					move = 0;
 				if (Input.GetAxisRaw("Horizontal") == x && Input.GetAxisRaw("Jump") == 1)
 				{
 					rigidbody2D.velocity = Vector2.zero;
