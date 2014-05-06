@@ -22,19 +22,39 @@ public class Player : MonoBehaviour
 	public int pushOfWallForce = 500;
 	public float extraXVel = 0;
 	bool onWall = false;
-	float time;
+	public float time;
 	public float displayTime;
+	public bool inReplay;
+
+	void Awake ()
+	{
+		anim = GetComponent<Animator>();
+		if (GameObject.Find("Player") == null)
+		{
+			DontDestroyOnLoad(gameObject);
+			name = "Player";
+		}
+	}
 
 	// Use this for initialization
 	void Start ()
 	{
-		anim = GetComponent<Animator>();
 		time = Time.fixedTime;
+		if (GameObject.Find("Player2") != null)
+		{
+			GameObject.Find("Player").transform.position = GameObject.Find("Player2").transform.position;
+			GameObject.Find("Player").transform.localScale = Vector3.one;
+			GameObject.Find("Player").GetComponent<Player>().facingRight = true;
+			GameObject.Find("Player").rigidbody2D.velocity = Vector2.zero;
+			Destroy(GameObject.Find("Player2"));
+		}
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
+		if (inReplay)
+			return;
 		foreach (GameObject go in GameObject.FindGameObjectsWithTag("GroundCheck"))
 			if (go.transform.IsChildOf(transform))
 			{
@@ -96,6 +116,8 @@ public class Player : MonoBehaviour
 	
 	void Update ()
 	{
+		if (inReplay)
+			return;
 		if (grounded && Input.GetKeyDown(KeyCode.Space))
 		{
 			rigidbody2D.AddForce(Vector2.up * jumpForce);
@@ -132,11 +154,26 @@ public class Player : MonoBehaviour
 			{
 				//GUILayout.BeginHorizontal();
 				if (GUI.Button(new Rect(0, i * 25 + 40, 100, 25), "Level " + i))
+				{
+					//name = "Player2";
+					GameObject.Find("Replays").GetComponent<Replays>().currentElement = 0;
+					GameObject.Find("Replays").GetComponent<Replays>().trms = new ArrayList();
+					GameObject.Find("Replays").GetComponent<Replays>().localScaleXs = new ArrayList();
 					Application.LoadLevel(i - 1);
+				}
 				if (PlayerPrefs.GetFloat("Level " + i + " Time", Mathf.Infinity) == Mathf.Infinity)
 					GUI.Label(new Rect(100, i * 25 + 40, 100, 25), "Time: Not beaten");
 				else
+				{
 					GUI.Label(new Rect(100, i * 25 + 40, 100, 25), "Time: " + PlayerPrefs.GetFloat("Level " + i + " Time", Mathf.Infinity));
+					if (GUI.Button(new Rect(200, i * 25 + 40, 100, 25), "Watch Replay"))
+					{
+						Application.LoadLevel(i - 1);
+						LevelSerializer.LoadNow(LevelSerializer.SavedGames[LevelSerializer.PlayerName][i - 1].Data);
+						inReplay = true;
+						Time.timeScale = 1;
+					}
+				}
 				//GUILayout.EndHorizontal();
 			}
 			//GUILayout.EndVertical();
@@ -145,8 +182,13 @@ public class Player : MonoBehaviour
 		{
 			GUI.skin = guiSkin1;
 			GUI.Label(new Rect(0, 25, Screen.width, 50), "" + Mathf.Round(displayTime / numOfDecimalPlaces) * numOfDecimalPlaces);
-			if (GUI.Button(new Rect(0, 0, 100, 25), "Pause"))
+			if (GUI.Button(new Rect(0, 0, 100, 25), "Menu"))
 				Time.timeScale = 0;
 		}
+	}
+
+	void OnApplicationQuit() {
+		// Make sure prefs are saved before quitting.
+		PlayerPrefs.Save();
 	}
 }
