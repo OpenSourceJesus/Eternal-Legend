@@ -5,12 +5,12 @@ public class BreakTile : MonoBehaviour
 {
 	bool breaking;
 	public int breakTimer;
-	int initBreakTimer;
+	public float alphaDecrease = .02f;
 
 	// Use this for initialization
 	void Start ()
 	{
-		initBreakTimer = breakTimer;
+
 	}
 	
 	// Update is called once per frame
@@ -19,7 +19,7 @@ public class BreakTile : MonoBehaviour
 		if (breaking)
 		{
 			float a = GetComponent<SpriteRenderer>().color.a;
-			a -= .02f;
+			a -= alphaDecrease;
 			GetComponent<SpriteRenderer>().color = new Color(GetComponent<SpriteRenderer>().color.r, GetComponent<SpriteRenderer>().color.g, GetComponent<SpriteRenderer>().color.b, a);
 			breakTimer --;
 			if (breakTimer <= 0)

@@ -37,9 +37,10 @@ public class Player : MonoBehaviour
 	}
 
 	// Use this for initialization
-	void Start ()
+	public void Start ()
 	{
-		time = Time.fixedTime;
+		time = Time.fixedTime - time;
+		//displayTime = 0;
 		if (GameObject.Find("Player2") != null)
 		{
 			GameObject.Find("Player").transform.position = GameObject.Find("Player2").transform.position;

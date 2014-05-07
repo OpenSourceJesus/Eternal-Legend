@@ -40,6 +40,7 @@ public class Portal : MonoBehaviour
 					Application.LoadLevel(Application.loadedLevel + 1);
 				else
 					Application.LoadLevel(0);
+				other.gameObject.GetComponent<Player>().Start ();
 			}
 			else
 			{
