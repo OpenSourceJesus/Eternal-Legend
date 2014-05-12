@@ -17,7 +17,6 @@ public class Replays : MonoBehaviour {
 		}
 		if (GameObject.Find("Replays2") != null)
 			Destroy(GameObject.Find("Replays2"));
-		GameObject.Find("Player").GetComponent<Player>().time = Time.fixedTime;
 	}
 	
 	// Update is called once per frame

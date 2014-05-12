@@ -15,7 +15,6 @@ public class Player : MonoBehaviour
 	float wallCheckRadius = 0.2f;
 	Animator anim;
 	public float groundHoverAmount = .1f;
-	//public float wallHoverAmount = .2f;
 	public GUISkin guiSkin1;
 	public GUISkin guiSkin2;
 	float numOfDecimalPlaces = .1f;
@@ -25,6 +24,9 @@ public class Player : MonoBehaviour
 	public float time;
 	public float displayTime;
 	public bool inReplay;
+	public Material skybox1;
+	public Material skybox2;
+	int pXInput;
 
 	void Awake ()
 	{
@@ -37,10 +39,8 @@ public class Player : MonoBehaviour
 	}
 
 	// Use this for initialization
-	public void Start ()
+	void Start ()
 	{
-		time = Time.fixedTime - time;
-		//displayTime = 0;
 		if (GameObject.Find("Player2") != null)
 		{
 			GameObject.Find("Player").transform.position = GameObject.Find("Player2").transform.position;
@@ -49,6 +49,11 @@ public class Player : MonoBehaviour
 			GameObject.Find("Player").rigidbody2D.velocity = Vector2.zero;
 			Destroy(GameObject.Find("Player2"));
 		}
+		displayTime = 0;
+		if (Application.loadedLevelName.Contains("1-"))
+			transform.Find("Camera").GetComponent<Skybox>().material = skybox1;
+		else if (Application.loadedLevelName.Contains("2-"))
+			transform.Find("Camera").GetComponent<Skybox>().material = skybox2;
 	}
 	
 	// Update is called once per frame
@@ -66,8 +71,13 @@ public class Player : MonoBehaviour
 					break;
 				}
 			}
-		move = Input.GetAxis("Horizontal") * maxSpeed;
+		if (Input.GetAxisRaw("Horizontal2") == 0)
+			move = Input.GetAxis("Horizontal") * maxSpeed;
+		else
+			move = Input.GetAxisRaw("Horizontal2") * maxSpeed;
 		if (!onWall && ((move > 0 && !facingRight) || (move < 0 && facingRight)))
+			Flip ();
+		if (move == 0 && pXInput < 0)
 			Flip ();
 		if (move != 0 && Physics2D.OverlapCircle(wallCheck1.position, wallCheckRadius, whatIsGround) && !Physics2D.OverlapCircle(wallCheck2.position, wallCheckRadius, whatIsGround))
 			transform.position = new Vector2(transform.position.x, transform.position.y + Vector2.Distance(wallCheck1.position, wallCheck2.position));
@@ -77,7 +87,6 @@ public class Player : MonoBehaviour
 			{
 				extraXVel = 0;
 				move = 0;
-				//transform.position = new Vector2(transform.position.x - wallHoverAmount * transform.localScale.x, transform.position.y);
 				break;
 			}
 		}
@@ -95,12 +104,10 @@ public class Player : MonoBehaviour
 					x = -1;
 				if ((move > 0 && x < 0) || (move < 0 && x > 0))
 					move = 0;
-				if (Input.GetAxisRaw("Horizontal") == x && Input.GetAxisRaw("Jump") == 1)
+				if ((Input.GetAxisRaw("Horizontal") == x || Input.GetAxisRaw("Horizontal2") == x) && Input.GetAxisRaw("Jump") == 1)
 				{
 					rigidbody2D.velocity = Vector2.zero;
-					//transform.position = new Vector2(transform.position.x - wallHoverAmount * x, transform.position.y);
 					rigidbody2D.AddForce(Vector2.up * jumpForce);
-					//rigidbody2D.AddForce(Vector2.right * -transform.lossyScale.x * pushOfWallForce);
 					extraXVel = x * pushOfWallForce;
 					grounded = false;
 					onWall = false;
@@ -117,9 +124,13 @@ public class Player : MonoBehaviour
 	
 	void Update ()
 	{
+		if (Time.timeSinceLevelLoad < .0001)
+			Start ();
+		if (Time.timeScale == 1)
+			displayTime += Time.deltaTime;
 		if (inReplay)
 			return;
-		if (grounded && Input.GetKeyDown(KeyCode.Space))
+		if (grounded && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton3)))
 		{
 			rigidbody2D.AddForce(Vector2.up * jumpForce);
 			grounded = false;
@@ -131,6 +142,7 @@ public class Player : MonoBehaviour
 			else
 				Time.timeScale = 0;
 		}
+		pXInput = Mathf.RoundToInt(Input.GetAxisRaw("Horizontal2"));
 	}
 
 	void Flip () 
@@ -143,20 +155,16 @@ public class Player : MonoBehaviour
 
 	void OnGUI ()
 	{
-		displayTime = Time.fixedTime - time;
 		GUI.skin = guiSkin2;
 		if (Time.timeScale == 0)
 		{
 			time = Time.fixedTime - time;
-			//GUILayout.BeginVertical();
 			if (GUI.Button(new Rect(0, 0, 100, 25), "Resume"))
 				Time.timeScale = 1;
 			for (int i = 1; i <= Application.levelCount; i ++)
 			{
-				//GUILayout.BeginHorizontal();
 				if (GUI.Button(new Rect(0, i * 25 + 40, 100, 25), "Level " + i))
 				{
-					//name = "Player2";
 					GameObject.Find("Replays").GetComponent<Replays>().currentElement = 0;
 					GameObject.Find("Replays").GetComponent<Replays>().trms = new ArrayList();
 					GameObject.Find("Replays").GetComponent<Replays>().localScaleXs = new ArrayList();
@@ -175,9 +183,9 @@ public class Player : MonoBehaviour
 						Time.timeScale = 1;
 					}
 				}
-				//GUILayout.EndHorizontal();
 			}
-			//GUILayout.EndVertical();
+			if (GUI.Button(new Rect(Screen.width - 100, Screen.height - 25, 100, 25), "Clear Data"))
+				PlayerPrefs.DeleteAll();
 		}
 		else
 		{
@@ -189,7 +197,6 @@ public class Player : MonoBehaviour
 	}
 
 	void OnApplicationQuit() {
-		// Make sure prefs are saved before quitting.
 		PlayerPrefs.Save();
 	}
 }

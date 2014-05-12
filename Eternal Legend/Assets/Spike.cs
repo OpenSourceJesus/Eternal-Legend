@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Spike : MonoBehaviour
 {
-
+	public bool destroyAll;
 
 	// Use this for initialization
 	void Start ()
@@ -23,5 +23,7 @@ public class Spike : MonoBehaviour
 		{
 			Application.LoadLevel(Application.loadedLevel);
 		}
+		else if (destroyAll && !other.gameObject.name.Contains("Spike"))
+			Destroy(other.gameObject);
 	}
 }

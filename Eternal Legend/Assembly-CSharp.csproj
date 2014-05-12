@@ -48,12 +48,14 @@
   <ItemGroup>
      <Compile Include="Assets\BreakTile.cs" />
      <Compile Include="Assets\Frog.cs" />
+     <Compile Include="Assets\MoveTile.cs" />
      <Compile Include="Assets\Player.cs" />
      <Compile Include="Assets\Portal.cs" />
      <Compile Include="Assets\Replays.cs" />
      <Compile Include="Assets\Saw.cs" />
      <Compile Include="Assets\ShadowHand.cs" />
      <Compile Include="Assets\Spike.cs" />
+     <Compile Include="Assets\ToggleTile.cs" />
      <Compile Include="Assets\UnitySerializer\Scripts\AddSomeForce.cs" />
      <Compile Include="Assets\UnitySerializer\Scripts\AdditionalData.cs" />
      <Compile Include="Assets\UnitySerializer\Scripts\AdditionalDataStorage.cs" />
